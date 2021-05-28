@@ -1,0 +1,41 @@
+#main-container{
+    padding: 10px;
+    display: grid;
+    background-color:rgba(133, 205, 250,0.9);
+    border-radius: 10px;
+    border: solid slategrey;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    grid-template-areas: 
+    "nav content";
+    grid-gap: 20px;
+}
+#navbar{
+    display: grid;
+    grid-area: nav;
+    font-size: large;
+    text-align: center;
+    padding: 10px;
+    background-color: aliceblue;
+    border-radius: 5px;
+    align-content:flex-start;
+}
+.nav-link:link{
+    color: black;
+    padding: 20px;
+}
+#main-doc{
+    grid-area: content;
+}
+#links{
+    display: grid;
+    overflow-y: auto;
+}
+@media screen and (max-width:500px) {
+    #main-container{
+        grid-template-areas: 
+        "nav"
+        "content";
+        overflow-y:scroll;
+    }
+    
+}
