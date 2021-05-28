@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="main-container">
+        <header>
+            <h1>Technical Docs</h1>
+            <nav id="nav-bar">
+                <h3>Topics :</h3>
+                <a href="#introduction_to_queues" class="nav-link">Introduction to Queues</a>
+                <a href="#operations_on_queue" class="nav-link">Operations on Queue</a>
+                <a href="#array_implementation_of_queue" class="nav-link">Array implementation Of Queue</a>
+                <a href="#applications_of_queue" class="nav-link">Applications of Queue</a>
+                <a href="#queue_in_c++_stl" class="nav-link">Queue in C++ STL</a>
+                <a href="#problems" class="nav-link">Problems</a>
+            </nav>
+        </header>
+        <main id="main-doc">
+
+            <section class="main-section" id="introduction_to_queues">
+                <header><h2>Introduction to Queues</h2></header>
+                <p>
+                    <li>Like Stack data structure, Queue is also a linear data structure which follows a particular order in which the operations are performed. The order is First In First Out (FIFO) which means that the element which is inserted first in the queue will be the first one to be removed from the queue. A good example of queue is any queue of consumers for a resource where the consumer that came first is served first.</li>
+                    <li>The difference between stacks and queues is in removing. In a stack we remove the most recently added item; in a queue, we remove the least recently added item.</li>
+                </p>
+            </section>
+
+            <section class="main-section" id="operations_on_queue">
+                <header><h2>Operations on Queue</h2></header>
+                <p>
+                    Mainly the following four basic operations are performed on queue:
+                    <li><strong>Enqueue:</strong> Adds an item to the queue. If the queue is full, then it is said to be an Overflow condition.</li>
+                    <li><strong>Dequeue:</strong> Removes an item from the queue. The items are popped in the same order in which they are pushed. If the queue is empty, then it is said to be an Underflow condition.</li>
+                    <li><strong>Front:</strong>  Get the front item from queue.</li>
+                    <li><strong>Rear:</strong> Get the last item from queue.</li>
+                </p>
+            </section>
+            
+            <section class="main-section" 
+            id="array_implementation_of_queue">
+            <header><h2>Array implementation Of Queue</h2></header>
+            <p>
+                <li>For implementing a queue, we need to keep track of two indices, front and rear. We enqueue an item at the rear and dequeue an item from the front. If we simply increment front and rear indices, then there may be problems, the front may reach the end of the array. The solution to this problem is to increase front and rear in a circular manner.</li>
+                <li>
+                    Consider an Array of size N is taken to implement a queue. Initially, the size of the queue will be zero(0). The total capacity of the queue will be the size of the array i.e. N. Now initially, the index front will be equal to 0, and rear will be equal to N-1. Every time on inserting an item, the index rear will increment by one, so increment it as: rear = (rear + 1)%N and everytime on removing an item, the front index will shift to right by 1 place so increment it as: front = (front + 1)%N.  
+                </li>
+            </p>
+            <code>
+                // CPP program for array
+                // implementation of queue
+                #include <bits/stdc++.h><br>
+                using namespace std;<br>
+                
+                // A structure to represent a queue<br>
+                class Queue {<br>
+                public:<br>
+                    int front, rear, size;<br>
+                    unsigned capacity;<br>
+                    int* array;<br>
+                };<br>
+                <br>
+                // function to create a queue<br>
+                // of given capacity.<br>
+                // It initializes size of queue as 0<br>
+                Queue* createQueue(unsigned capacity)<br>
+                {<br>
+                    Queue* queue = new Queue();<br>
+                    queue->capacity = capacity;<br>
+                    queue->front = queue->size = 0;<br>
+                
+                    // This is important, see the enqueue<br>
+                    queue->rear = capacity - 1;<br>
+                    queue->array = new int[queue->capacity];<br>
+                    return queue;<br>
+                }<br>
+                <br>
+                // Queue is full when size<br>
+                // becomes equal to the capacity<br>
+                int isFull(Queue* queue)<br>
+                {<br>
+                    return (queue->size == queue->capacity);<br>
+                }<br>
+                <br>
+                // Queue is empty when size is 0<br>
+                int isEmpty(Queue* queue)<br>
+                {<br>
+                    return (queue->size == 0);<br>
+                }<br>
+                <br>
+                // Function to add an item to the queue.<br>
+                // It changes rear and size<br>
+                void enqueue(Queue* queue, int item)<br>
+                {<br>
+                    if (isFull(queue))<br>
+                        return;<br>
+                    queue->rear = (queue->rear + 1)<br>
+                                % queue->capacity;<br>
+                    queue->array[queue->rear] = item;<br>
+                    queue->size = queue->size + 1;<br>
+                    cout << item << " enqueued to queue\n";<br>
+                }<br>
+                
+                // Function to remove an item from queue.<br>
+                // It changes front and size<br>
+                int dequeue(Queue* queue)<br>
+                {<br>
+                    if (isEmpty(queue))<br>
+                        return INT_MIN;<br>
+                    int item = queue->array[queue->front];<br>
+                    queue->front = (queue->front + 1)
+                                % queue->capacity;<br>
+                    queue->size = queue->size - 1;<br>
+                    return item;<br>
+                }<br>
+                <br>
+                // Function to get front of queue<br>
+                int front(Queue* queue)<br>
+                {<br>
+                    if (isEmpty(queue))<br>
+                        return INT_MIN;<br>
+                    return queue->array[queue->front];<br>
+                }<br>
+                <br>
+                // Function to get rear of queue<br>
+                int rear(Queue* queue)<br>
+                {<br>
+                    if (isEmpty(queue))<br>
+                        return INT_MIN;<br>
+                    return queue->array[queue->rear];<br>
+                }<br>
+                <br>
+                // Driver code<br>
+                int main()<br>
+                {<br>
+                    Queue* queue = createQueue(1000);<br>
+                    <br>
+                    enqueue(queue, 10);<br>
+                    enqueue(queue, 20);<br>
+                    enqueue(queue, 30);<br>
+                    enqueue(queue, 40);<br>
+                    <br>
+                    cout << dequeue(queue)<br>
+                        << " dequeued from queue\n";<br>
+                        <br>
+                    cout << "Front item is "
+                        << front(queue) << endl;<br>
+                    cout << "Rear item is "
+                        << rear(queue) << endl;<br>
+                        <br>
+                    return 0;<br>
+                }<br>
+            </code>
+            </section>
+            
+            <section class="main-section" id="applications_of_queue">
+            <header><h2>Applications of Queue</h2></header>
+            <p>
+                Queue is used when things don’t have to be processed immediatly, but have to be processed in First InFirst Out order like Breadth First Search. This property of Queue makes it also useful in following kind of scenarios.
+                <li>When a resource is shared among multiple consumers. Examples include CPU scheduling, Disk Scheduling.</li>
+                <li>When data is transferred asynchronously (data not necessarily received at same rate as sent) between two processes. Examples include IO Buffers, pipes, file IO, etc.</li>
+            </p>
+            </section>
+            
+            <section class="main-section" 
+            id="queue_in_c++_stl">
+            <header><h2>Queue in C++ STL</h2></header>
+            <p>
+                The Standard template Library in C++ offers a built-in implementation of the Queue data structure for simpler and easy use. The STL implementation of queue data structure implements all basic operations on queue such as enque(), deque(), clear() etc.
+                The functions supported by std::queue are :
+                <li>empty() – Returns whether the queue is empty.</li>
+                <li>size() – Returns the size of the queue.</li>
+                <li>swap(): Exchange the contents of two queues but the queues must be of same type, although sizes may differ.</li>
+                <li>emplace(): Insert a new element into the queue container, the new element is added to the end of the queue.</li>
+                <li>front() and back(): front() function returns a reference to the first element of the queue. back() function returns a reference to the last element of the queue.</li>
+                <li>push(g) and pop(): The push() function adds the element ‘g’ at the end of the queue. The pop() function deletes the first element of the queue.</li>
+            </p>
+            <code></code>
+            </section>
+            
+            <section class="main-section" 
+            id="problems">
+            <header><h2>Problems</h2></header>
+            <p>
+                <h3>Problem #1 : Reversing the first K elements of a Queue</h3><br>
+                <li>Description - Given an integer k and a queue of integers, we need to reverse the order of the first k elements of the queue, leaving the other elements in the same relative order.</li>
+            </p>
+            <code>
+                /* Function to reverse the first K elements of the Queue */<br>
+                void reverseQueueFirstKElements(k, Queue) <br>
+                { <br>    
+                    if (Queue.empty() == true || k &gt; Queue.size()) <br>
+                    return<br>
+                    if (k &lt;= 0) <br>
+                    return<br>    
+                    stack <int> Stack <br>    
+                    /* Push the first K elements into a Stack*/<br>    
+                    for ( i = 1 to k) { <br>        
+                    Stack.push(Queue.front())<br>        Queue.pop()<br>    
+                    } <br>    
+                    /* Enqueue the contents of stack <br>       
+                    at the back of the queue*/<br>    
+                    while (!Stack.empty()) { <br>        Queue.push(Stack.top())<br>        
+                        Stack.pop()<br>    
+                    } <br>    
+                    /* Remove the remaining elements and  <br>       
+                    enqueue them at the end of the Queue*/<br>    
+                    for (int i = 0 to i &lt; Queue.size() - k) { <br>        
+                    Queue.push(Queue.front())<br>        Queue.pop()<br>    
+                } <br>} <br>
+            </code>
+            <p>
+                <h3>Problem #2 : Sliding Window Maximum</h3><br>
+                <li>
+                    Description - Given an array and an integer k, find the maximum for each and every contiguous subarray of size k.
+                </li>
+            </p>
+            <code>
+                void printKMax(arr[], n, k) <br>{ <br>    // Create a Double Ended Queue, Qi that will store indexes of array elements <br>    // The queue will store indexes of useful elements in every window and it will <br>    // maintain decreasing order of values from front to rear in Qi, i.e., <br>    // arr[Qi.front[]] to arr[Qi.rear()] are sorted in decreasing order <br>    deque &lt; int &gt; Qi(k)<br>  <br>    /* Process first k (or first window) elements of array */<br>    for (i = 0; i &lt; k; ++i) { <br>        // For every element, the previous smaller elements are useless so <br>        // remove them from Qi <br>        while ((!Qi.empty()) &amp;&amp; arr[i] &gt;= arr[Qi.back()]) <br>            Qi.pop_back() // Remove from rear <br>  <br>        // Add new element at rear of queue <br>        Qi.push_back(i)<br>    } <br>  <br>    // Process rest of the elements, i.e., from arr[k] to arr[n-1] <br>    for (; i &lt; n; ++i) { <br>        // The element at the front of the queue is the largest element of <br>        // previous window, so print it <br>        print (arr[Qi.front()]) <br>  <br>        // Remove the elements which are out of this window <br>        while ((!Qi.empty()) &amp;&amp; Qi.front() &lt;= i - k) <br>            Qi.pop_front() // Remove from front of queue <br>  <br>        // Remove all elements smaller than the currently <br>        // being added element (remove useless elements) <br>        while ((!Qi.empty()) &amp;&amp; arr[i] &gt;= arr[Qi.back()]) <br>            Qi.pop_back()<br>  <br>        // Add current element at the rear of Qi <br>        Qi.push_back(i)<br>    } <br>  <br>    // Print the maximum element of last window <br>    print (arr[Qi.front()]) <br>} <br>
+            </code>
+            <p>
+                <h3>Problem #3 :  Implementing Stack using Queue</h3><br>
+                <li>
+                    Problem: Given a Queue data structure that supports standard operations like enqueue() and dequeue(). We need to implement a Stack data structure using only instances of Queue and queue operations allowed on the instances.
+                </li>
+            </p>
+            <code>
+                /* Program to implement a stack using 
+                two queue */<br>
+                #include <bits/stdc++.h><br>
+                <br>
+                using namespace std;<br>
+                <br>
+                class Stack {<br>
+                    // Two inbuilt queues<br>
+                    queue<int> q1, q2;<br>
+                        <br>
+                    // To maintain current number of<br>
+                    // elements<br>
+                    int curr_size;<br>
+                    <br>
+                public:<br>
+                    Stack()<br>
+                    {<br>
+                        curr_size = 0;<br>
+                    }<br>
+                    <br>
+                    void push(int x)<br>
+                    {<br>
+                        curr_size++;<br>
+                        <br>
+                        // Push x first in empty q2<br>
+                        q2.push(x);<br>
+                        <br>
+                        // Push all the remaining<br>
+                        // elements in q1 to q2.<br>
+                        while (!q1.empty()) {<br>
+                            q2.push(q1.front());<br>
+                            q1.pop();<br>
+                        }<br>
+                        <br>
+                        // swap the names of two queues<br>
+                        queue<int> q = q1;<br>
+                        q1 = q2;<br>
+                        q2 = q;<br>
+                    }<br>
+                    <br>
+                    void pop()<br>
+                    {<br>
+                        <br>
+                        // if no elements are there in q1<br>
+                        if (q1.empty())<br>
+                            return;<br>
+                        q1.pop();<br>
+                        curr_size--;<br>
+                    }<br>
+                    <br>
+                    int top()<br>
+                    {<br>
+                        if (q1.empty())<br>
+                            return -1;<br>
+                        return q1.front();<br>
+                    }<br>
+                    <br>
+                    int size()<br>
+                    {<br>
+                        return curr_size;<br>
+                    }<br>
+                };<br>
+                <br>
+                // Driver code<br>
+                int main()<br>
+                {<br>
+                    Stack s;<br>
+                    s.push(1);<br>
+                    s.push(2);<br>
+                    s.push(3);<br>
+                    <br>
+                    cout << "current size: " << s.size()
+                        << endl;<br>
+                    cout << s.top() << endl;<br>
+                    s.pop();<br>
+                    cout << s.top() << endl;<br>
+                    s.pop();<br>
+                    cout << s.top() << endl;<br>
+                    <br>
+                    cout << "current size: " << s.size()
+                        << endl;<br>
+                    return 0;<br>
+                }<br>
+            </code>
+            </section>
+            
+        </main>
+    </div>
+</body>
+</html>
